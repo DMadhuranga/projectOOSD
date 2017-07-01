@@ -1,3 +1,8 @@
+<?php
+if(isset($_SESSION['user'])){
+  $user = unserialize($_SESSION['user']);
+}
+?>
 <html>
 <head>
 <title>home page</title>
@@ -8,14 +13,14 @@
 <link rel="stylesheet" type="text/css" href="../assests/library/sweetalert-master/dist/sweetalert.css">
 <style type='text/css'>
 .col-md-2-height1 {
-	height: 1200px;
+  height: 1200px;
     text-align: left;
-	background-color: #f8f8f8;
-	<!--background-color: #f8f8f8;-->
+  background-color: #f8f8f8;
+  <!--background-color: #f8f8f8;-->
 }
 .navbar-default-nopaddingup{
-	padding-bottom: 0px;
-	margin-bottom: 0px;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
 }
 </style>
 
@@ -33,7 +38,7 @@
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand1" href="#">
-	  <img alt="Bitz" src="../images/logo.png" style="width:50px;height:50px;">
+    <img alt="Bitz" src="../images/logo.png" style="width:50px;height:50px;">
         
       </a>
     </div>
@@ -52,11 +57,11 @@
       </form>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#">Requests</a></li>
-		<li><a href="#">Notifications</a></li>
+    <li><a href="#">Notifications</a></li>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo $user->getUName(); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Edit Profile</a></li>
+            <li><a href="../editProfile.php">Edit Profile</a></li>
             <li role="separator" class="divider"></li>
             <li><a href="../logout.php">Log Out</a></li>
           </ul>

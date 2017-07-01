@@ -130,9 +130,26 @@ if (isset($_REQUEST["submitb"])){
                   <label for="sel1">Drug Type:</label>
                   <select name= "type" class="form-control" id="sel1">
                   <option value="Tablet">Tablet</option>
+
+                  <option value="Capsule">Capsule</option>
+
+                  <option value="Inhaler">Inhaler</option>
+
+                  <option value="Vial">Vial</option>
+
+                  <option value="Bottle">Bottle</option>
+
+                  <option value="Ampules">Ampules</option>
+
+                  <option value="Suppociteries">Suppociteries</option>
+
+                  <option value="Tube">Tube</option>
+
+                  <option value="Pessaries">Pessaries</option>
+
                   <option value="Spray">Spray</option>
-                  <option value="Syrup">Syrup</option>
-                  <option value="Cream">Cream</option>
+
+                  <option value="Other">Other</option>
                   </select>
                 </div>
               </div>

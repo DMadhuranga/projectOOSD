@@ -166,8 +166,10 @@ function newF(u_id){
 },
 function(isConfirm){
   var dt = true;
-  dt =  delUser(u_id);
-  if (dt) {
+  if(isConfirm){
+    dt =  delUser(u_id);
+  }
+  if (dt && isConfirm) {
     swal("Deleted!", "User has deleted successfully", "success");
   } else {
     swal("Error!", "Server Error has occurred", "error");
