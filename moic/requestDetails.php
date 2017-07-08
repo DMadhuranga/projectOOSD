@@ -92,6 +92,7 @@ if ($user->getRoleId()!=0){
     </tbody> 
     </table>
     <button type="button" class="btn btn-success" id="delete" onclick = "newF2(<?php echo  $request_id; ?>)">Accept Request</button>
+    <button type="button" class="btn btn-primary" id="delete" onclick = "location.href='showRequests.php';">Cancel Request</button>
     <button type="button" class="btn btn-danger" id="delete" onclick = "newF(<?php echo  $request_id; ?>)">Decline Request</button>
     
     
