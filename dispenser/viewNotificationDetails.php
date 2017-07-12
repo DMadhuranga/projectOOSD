@@ -75,15 +75,16 @@ if ($user->getRoleId()!=1){
 							 </div>
                     <div class="col-sm-10 form-group">
                         <div class="form-group" >
-                            <div class="col-md-6"></div>
-                            <div class="col-md-6">
-                                <button id="addb"  type="button" class="btn btn-lg btn-info" onclick="location.href='home.php'" >Go to Home</button></div>
+                            <div class="col-md-4"></div>
 
-                        <div class="form-group">
 
+                            <button id="addb"  type="button" class="btn btn-lg btn-info" onclick="location.href='viewAllNotifications.php'" ><span class="glyphicon glyphicon-th-list"></span> View All</button>
+                            <div class="col-md-1">
+                                <button id="addb"  type="button" class="btn btn-lg btn-success" onclick="location.href='home.php'" ><span class="glyphicon glyphicon-home"></span> Home</button>
+                            </div>
+                            <div class="col-md-3"></div>
 
                         </div>
-                    </div>
         </div>
     </div>
     
