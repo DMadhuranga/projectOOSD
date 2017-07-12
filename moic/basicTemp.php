@@ -61,7 +61,18 @@ if(isset($_SESSION['user'])){
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
       <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">Requests</a></li>
+          <li class=""dropdown">
+          <?php
+          $query="SELECT * FROM hospital.requests WHERE state='0' AND receiving_dept='0' ORDER BY request_id";//" DESC LIMIT 5";
+          $result=mysqli_query($conn,$query);
+          $count=mysqli_num_rows($result);
+          ?>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="label label-pill label-danger count"><?php if ($count!=0){ echo $count;}?></span><img alt="Request icon" src="../images/request.png"style="width:25px;height:25px;"> Requests</a>
+          <ul class="dropdown-menu">
+              <?php requests(); ?>
+              <li><a href="viewAllRequests.php">View all..</a></li>
+          </ul>
+          </li>
           <li class=""dropdown">
           <?php
           $query="SELECT * FROM moic.unseen_notifications WHERE status='1' ORDER BY id";//" DESC LIMIT 5";
@@ -120,6 +131,8 @@ function htmlbodyHeightUpdate(){
 </script>
 </body>
 </html>
+
+
 <?php
 function notifications(){
     $conn = mysqli_connect('localhost', 'root', '1010');
@@ -145,6 +158,28 @@ function notifications(){
             }
         }
     }
+    else{
+        echo'<li><a href ="#" class="text-bold text-italic">No New Notifications</a></li>';
+    }
+}
+
+function requests(){
+    $conn = mysqli_connect('localhost', 'root', '1010');
+    $query="SELECT * FROM hospital.requests WHERE state='0' AND receiving_dept='0' ORDER BY request_id DESC LIMIT 5";
+    $result=mysqli_query($conn,$query);
+
+    if(mysqli_num_rows($result)>0){
+        while($row=mysqli_fetch_array($result)){
+            $id=$row['request_id'];
+            $message=$row['description'];
+            echo'<li><a href="viewRequestDetails.php?id='. $row['request_id'].' ">
+                    <small><em>'.$row['date'].'</em></small><br />
+                    <srong><b>'.$message.'</b></srong><br />
+                    
+                </a></li>';
+            }
+        }
+
     else{
         echo'<li><a href ="#" class="text-bold text-italic">No New Notifications</a></li>';
     }
