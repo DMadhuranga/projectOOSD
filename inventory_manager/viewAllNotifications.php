@@ -40,16 +40,42 @@ if ($user->getRoleId()!=2){
     <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Date</th>
+                                    <th><a href='viewAllNotifications.php?sort=date' style="text-decoration: none; color: black">Date<img alt="sort" src="../images/sort2.png"style="width:25px;height:25px;" ></th>
                                     <th>Notification</th>
-                                    <th>View</th>
+                                    <th><a href='viewAllNotifications.php?sort=view' style="text-decoration: none; color: black">View<img alt="sort" src="../images/sort2.png"style="width:25px;height:25px;" ></th>
+
 
                                 </tr>
                             </thead>
                             <tbody>
 
                                 <?php
-                                    $query="SELECT * FROM inventory.unseen_notifications ORDER BY notification_id DESC";
+                                    if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };
+                                    $results_per_page = 10;
+                                    $start_from = ($page-1) * $results_per_page;
+                                    $query_total="SELECT * FROM inventory.unseen_notifications";
+                                    $res_total=mysqli_query($conn,$query_total);
+                                    $count=mysqli_num_rows($res_total);
+                                    $total_pages=ceil($count/$results_per_page);
+
+                                    if(isset($_GET['sort']))
+                                    {
+                                        switch(strtolower(trim($_GET['sort'])))
+                                        {
+                                            case 'date':
+                                                $sort='notification_id';
+                                                break;
+                                            case 'view':
+                                                $sort='status';
+                                                break;
+                                        }
+
+
+                                    }
+                                    else{
+                                        $sort='notification_id';
+                                    }
+                                    $query="SELECT * FROM inventory.unseen_notifications ORDER BY $sort DESC LIMIT $start_from,".$results_per_page;
                                     $res=mysqli_query($conn,$query);
                                     if ($res) {
                                         $notifications = array();
@@ -71,7 +97,7 @@ if ($user->getRoleId()!=2){
 
                                                     <td><b><?php echo $date; ?></b></td>
                                                     <td><b><?php echo $heading; ?></b></td>
-                                                    <td><a type="button" class="btn btn-warning" href="viewNotificationDetails.php?id=<?php echo $notification_id;?>
+                                                    <td><a type="button" class="btn btn-success" href="viewNotificationDetails.php?id=<?php echo $notification_id;?>
                                                     &title=<?php echo $heading;?> &msg=<?php echo $rowNotification['description'];?> &date=<?php echo $date ?> &type=<?php echo $rowNotification['type'];?> "
                                                            onclick="return update(<?php echo $notification_id;?>);">View</a></td>
 
@@ -90,6 +116,24 @@ if ($user->getRoleId()!=2){
 
                             </tbody>
                         </table>
+                        <ul class="pagination">
+                            <?php if ( $page<=1){?>
+                                <li class="disabled"><a href="">Previous</a> </li>
+                            <?php }else {?>
+                                <li><a href="viewAllNotifications.php?page=<?php echo $page-1;?>">Previous</a></li><?php }?>
+
+                            <?php  for ($i=1; $i<=$total_pages; $i++) {
+                                if($i==$page){?>
+                                    <li class="active"><a href="viewAllNotifications.php?page=<?php echo $i;?>"><?php echo $i?></a></li>
+                                <?php }
+                                else{?>
+                                    <li><a href="viewAllNotifications.php?page=<?php echo $i;?>"><?php echo $i?></a></li>
+                                <?php }}?>
+                            <?php if ( $page>=$total_pages){?>
+                                <li class="disabled"><a href="">Next</a> </li>
+                            <?php }else {?>
+                                <li><a href="viewAllNotifications.php?page=<?php echo $page+1;?>">Next</a></li><?php }?>
+                        </ul>
     
     
     <!-- Put Anything-->
