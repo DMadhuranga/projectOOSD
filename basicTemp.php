@@ -1,4 +1,5 @@
 <?php
+include("User.php");
 if(isset($_SESSION['user'])){
   $user = unserialize($_SESSION['user']);
 }
@@ -27,8 +28,9 @@ if(isset($_SESSION['user'])){
 </head>
 <body>
 <header>
-<nav class="navbar navbar-default navbar-default-nopaddingup">
   <div class="container-fluid">
+<nav class="navbar navbar-default navbar-default-nopaddingup">
+
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -68,8 +70,8 @@ if(isset($_SESSION['user'])){
         </li>
       </ul>
     </div><!-- /.navbar-collapse -->
+    </nav>
   </div><!-- /.container-fluid -->
-</nav>
 </header>
 <script src="assests/jquery.min.js"></script>
 <script src="assests/library/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>

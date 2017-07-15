@@ -34,8 +34,12 @@ if (isset($_SESSION['logged']) && $_SESSION['logged']){
     if (!$error){
         $query = "select password,u_id,role_id,email,first_name,last_name from hospital.users where u_name ='$name' ";
         $res = mysqli_query($conn,$query);
+
         if ($res){
             $res = mysqli_fetch_array($res,MYSQLI_ASSOC);
+            $userId=$res['u_id'];//new
+            include('log.php');//new
+
             if($res['password']==$password){
                 $nuser = new User();
                 $nuser->setUName($name);
@@ -57,21 +61,22 @@ if (isset($_SESSION['logged']) && $_SESSION['logged']){
                 $res = mysqli_query($conn,$query);
                 $pages = array();
                 if ($res){
-                  while($row=mysqli_fetch_array($res,MYSQLI_ASSOC)){
-                    $tempPage = array();
-                    array_push($tempPage,$row['page_name']);
-                    array_push($tempPage,$row['page_url']);
-                    array_push($pages,$tempPage);
-                  }
+                    while($row=mysqli_fetch_array($res,MYSQLI_ASSOC)){
+                        $tempPage = array();
+                        array_push($tempPage,$row['page_name']);
+                        array_push($tempPage,$row['page_url']);
+                        array_push($pages,$tempPage);
+                    }
 
                 }
                 $_SESSION['pages'] = $pages;
+                logUser($userId,$conn);//new
                 header('location:home.php');
             }elseif ($res['u_id']==''){
-				$nErr = true;
+                $nErr = true;
                 $nameErr = "* Invalid user name";
             }else{
-				$pErr = true;
+                $pErr = true;
                 $passwordErr='* Password missmatch ';
             }
         }else{
@@ -136,16 +141,16 @@ if (isset($_SESSION['logged']) && $_SESSION['logged']){
             background-image: -o-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
             background-image: linear-gradient(to right, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
         }
-		
-		Username:-webkit-input-placeholder {
-			color:    #999;
-		}
-		Username:-moz-placeholder {
-			color:    #999;
-		}
-		Username:-ms-input-placeholder {
-			color:    #999;
-		}
+
+        Username:-webkit-input-placeholder {
+            color:    #999;
+        }
+        Username:-moz-placeholder {
+            color:    #999;
+        }
+        Username:-ms-input-placeholder {
+            color:    #999;
+        }
     </style>
 
 </head>
@@ -155,24 +160,24 @@ if (isset($_SESSION['logged']) && $_SESSION['logged']){
         <form action="login.php" method='POST' name="Login_Form" class="form-signin">
             <h3 class="form-signin-heading">Welcome Back! Please Sign In</h3>
             <hr class="colorgraph"><br>
-			<input type="text" class="form-control" name="Username" placeholder="Username" required="" autofocus="" />
-			<!--<label><span style = "color:red"><?php echo $nameErr;?></span></label>-->
-			<?php
-			if($nErr){
-            ?><p style='color:red; text-align:center; font-size:15px'>    Invalid username</p><?php
-			}else{
-			?><p></p><?php
-			}?>
-			
-			<input type="password" class="form-control" name="Password" placeholder="Password" required=""/>
-			<!--<label><span style = "color:red"><?php echo $passwordErr;?></span></label>-->
+            <input type="text" class="form-control" name="Username" placeholder="Username" required="" autofocus="" />
+            <!--<label><span style = "color:red"><?php echo $nameErr;?></span></label>-->
             <?php
-			if($pErr){
-            ?><p style='color:red; text-align:center; font-size:15px'>    Incorrect Password</p><?php
-			}else{
-			?><p></p><?php
-			}?>
-			
+            if($nErr){
+                ?><p style='color:red; text-align:center; font-size:15px'>    Invalid username</p><?php
+            }else{
+                ?><p></p><?php
+            }?>
+
+            <input type="password" class="form-control" name="Password" placeholder="Password" required=""/>
+            <!--<label><span style = "color:red"><?php echo $passwordErr;?></span></label>-->
+            <?php
+            if($pErr){
+                ?><p style='color:red; text-align:center; font-size:15px'>    Incorrect Password</p><?php
+            }else{
+                ?><p></p><?php
+            }?>
+
             <button class="btn btn-lg btn-primary btn-block"  name="Submit" value="Login" type="Submit">Login</button>
         </form>
     </div>

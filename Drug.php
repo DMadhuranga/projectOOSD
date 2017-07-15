@@ -1,19 +1,29 @@
 <?php
-
-/**
- * Created by PhpStorm.
- * User: User
- * Date: 6/30/2017
- * Time: 7:07 AM
- */
-class Drug
-{
-    var $serial_number;
+include('drugbatch.php');
+class Drug{
     var $drug_name;
+    var $serial_number;
     var $type;
     var $description;
-    var $deleted;
-    var $batches;
+   // $batches  = array('' => , );
+ //   var $email;
+ //   var $password;
+ //   var $last_name;
+    /**
+     * @return mixed
+     */
+    public function getDName()
+    {
+        return $this->drug_name;
+    }
+
+    /**
+     * @param mixed $u_name
+     */
+    public function setDName($drug_name)
+    {
+        $this->drug_name = $drug_name;
+    }
 
     /**
      * @return mixed
@@ -24,27 +34,11 @@ class Drug
     }
 
     /**
-     * @param mixed $serial_number
+     * @param mixed $first_name
      */
     public function setSerialNumber($serial_number)
     {
         $this->serial_number = $serial_number;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDrugName()
-    {
-        return $this->drug_name;
-    }
-
-    /**
-     * @param mixed $drug_name
-     */
-    public function setDrugName($drug_name)
-    {
-        $this->drug_name = $drug_name;
     }
 
     /**
@@ -56,7 +50,7 @@ class Drug
     }
 
     /**
-     * @param mixed $type
+     * @param mixed $role_id
      */
     public function setType($type)
     {
@@ -72,7 +66,7 @@ class Drug
     }
 
     /**
-     * @param mixed $description
+     * @param mixed $u_id
      */
     public function setDescription($description)
     {
@@ -88,29 +82,15 @@ class Drug
     }
 
     /**
-     * @param mixed $deleted
+     * @param mixed $email
      */
     public function setDeleted($deleted)
     {
-        $this->deleted = $deleted;
+        $this->email = $email;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getBatches()
-    {
-        return $this->batches;
-    }
-
-    /**
-     * @param mixed $batches
-     */
-    public function setBatches($batches)
-    {
-        $this->batches = $batches;
-    }
-
-
+    
 
 }
+
+?>
