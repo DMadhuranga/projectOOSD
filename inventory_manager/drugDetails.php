@@ -80,7 +80,6 @@ if ($res){
       <th>Dispensary Balance</th> 
       <th>Other Department Balance</th>
       <th>Total Balance</th>
-      <th>Send Return Order</th>
       </tr>  
     </thead>  
     <tbody>
@@ -95,9 +94,7 @@ if ($res){
           <td><?php echo $batch->getInventory_balance(); ?></td> 
           <td><?php echo $batch->getDispensary_balance(); ?></td> 
           <td><?php echo $batch->getOther_department_balance(); ?></td> 
-          <td><?php echo $batch->getTotal_balance(); ?></td>
-          <td>
-          <button type="button" id = "1" class="btn btn-warning" >Send Return Order </button></td> 
+          <td><?php echo $batch->getTotal_balance(); ?></td> 
         </tr> 
         
       <?php

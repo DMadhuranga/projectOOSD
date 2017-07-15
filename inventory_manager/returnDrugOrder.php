@@ -36,7 +36,7 @@ if($res){
 .display-4-2{
   margin-left: 15px;
 }
-</style>
+</style>  
 <link rel="stylesheet" href="../assests/library/jquery-ui-1.12.1.custom/jquery-ui.structure.css" />
 <link rel="stylesheet" href="../assests/library/jquery-ui-1.12.1.custom/jquery-ui.theme.css" />
 <script src="../assests/library/jquery-ui-1.12.1.custom/jquery-ui.css"></script>
@@ -66,14 +66,17 @@ if($res){
     <div class="col-lg-12 well">
   <div class="row">
         
-          <div class="col-md-10 ">
+          <div class="col-md-10">
           <div class ="row">
-          <h1 class="display-4 display-4-2">Drug Arrival</h1>
+          <h1 class="display-4 display-4-2">Drug Request</h1>
             <!--<label > Drug Cart</label>-->
           </div>
           </div>
-          <div class="col-md-2 form-group">
-          <button id="sub" onclick="submitForm();"  type="button" class="btn btn-lg btn-info" name="addb" disabled="">Add Arrival</button>
+          <div class="col-md-2">
+          <div class="row">
+          <button id="sub" onclick="submitForm();"  type="button" class="btn btn-lg btn-info" name="addb" disabled="">Send Request</button>
+          <input id="uid" value="<?php echo $user->getUId(); ?>" name="" type="hidden">
+          </div>
           </div>
           
    </div>
@@ -103,20 +106,8 @@ if($res){
             </div>
             <div class="row">
               <div class="col-sm-6 form-group">
-                <label>Arrival Date</label>
-                <input id="arrivalD" name= "u_name" type="text"  class="form-control">
-              </div>
-              <div class="col-sm-6 form-group">
-                <div class="form-group">
-                  <label for="sel1">Expire Date</label>
-                  <input id="expireD" name= "u_name" type="text"  class="form-control">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-6 form-group">
-                <label>Batch Number</label>
-                <input id="batchN" name= "u_name" type="text"  class="form-control">
+                <!--<label>Batch Number</label>
+                <input id="batchN" name= "u_name" type="text"  class="form-control">-->
               </div>
               <div class="col-sm-4 form-group">
                 <div class="form-group">
@@ -125,7 +116,7 @@ if($res){
               <div class="col-sm-2 form-group">
                 <div class="form-group">
                   <label for="sel1"></label>
-                  <button id="addb"  type="button" class="btn btn-lg btn-info" name="addb" onclick="addThisDrug();" >Add To Arrival</button>
+                  <button id="addb"  type="button" class="btn btn-lg btn-info" name="addb" onclick="addThisDrug();" >Add To Request</button>
                 </div>
               </div>
             </div>      
@@ -139,10 +130,7 @@ if($res){
       <tr>
         <th>#</th>   
         <th>Drug Name - Serail Number</th>    
-        <th>Batch Number</th>  
         <th>Quantity</th> 
-        <th>Arrival Date</th>
-        <th>Expire Date</th>
         <th>Remove</th> 
       </tr>  
     </thead>  
@@ -185,85 +173,38 @@ $(document).ready(function() {
 function addThisDrug(){
   var quantity = $("#quantity").val();
   var states = $("#serialN").val();
-  var batch = $("#batchN").val();
-  var arrival = $("#arrivalD").val();
-  var expire = $("#expireD").val();
-
   if(states==null){
     swal("Select a drug!", "", "error");
   }else if(quantity==""){
     swal("Enter a quantity!", "", "error");
-  }else if(batch==""){
-    swal("Enter batch number!", "", "error");
-  }else if(arrival==""){
-    swal("Enter arrival date!", "", "error");
-  }else if(expire==""){
-    swal("Enter expire date!", "", "error");
-  }else if (!dateFormat(arrival)){
-    swal("Arrival date format error!", "", "error");
-  }else if(!dateFormat(expire)){
-    swal("Expire date format error!", "", "error");
   }else if(isNaN(quantity)){
     swal("Quantity Error!", "", "error");
   }else if(parseInt(quantity)<=0){
     swal("Invalid Quantity!", "", "error");
   }else if(parseFloat(quantity)>parseInt(quantity)){
     swal("Invalid Quantity!", "", "error");
-  }else if(alreadyExists(batch)){
-      swal("Batch number already added!", "", "error");
+  }else if(alreadyExists(states)){
+      swal("Drug already added!", "", "error");
   }else{
-    var dub = false;
-    var ok = true;
-    $.ajax({
-      type: "POST",
-      url: "ajax.php",
-      data:{
-         "nbatch_number" : batch
-      },
-      async: false,
-      success: function(msg){
-        //alert(msg);
-        if(msg=="1"){
-          dub = true;
-        }else if(msg!="ok"){
-          ok = false;
-        }
-      }
-    });
-    if(!ok){
-      swal("Server Error!", "", "error");
-    }else if(dub){
-      swal("Batch number already exists!", "", "error");
-    }else{
       document.getElementById("sub").disabled = false;
-      myAddARow(states,batch,quantity,arrival,expire);
+      myAddARow(states,quantity);
       document.getElementById('quantity').value = "";
-      document.getElementById('batchN').value = "";
-      document.getElementById('arrivalD').value = "";
-      document.getElementById('expireD').value = "";
-    }
   }
   
 }
 </script>
 <script type="text/javascript">
-  function myAddARow(name,bnum,qu,arrD,expD) {
+  function myAddARow(name,qu) {
     var table = document.getElementById("myTable");
     var row = table.insertRow(table.rows.length);
     var cell0 = row.insertCell(0);
     var cell1 = row.insertCell(1);
     var cell2 = row.insertCell(2);
     var cell3 = row.insertCell(3);
-    var cell4 = row.insertCell(4);
-    var cell5 = row.insertCell(5);
-    var cell6 = row.insertCell(6);
     cell0.innerHTML = table.rows.length-1;
     cell1.innerHTML = name;
-    cell2.innerHTML = bnum;
-    cell3.innerHTML = qu;
-    cell4.innerHTML = arrD;
-    cell5.innerHTML = expD;
-    cell6.innerHTML = "<button class='btn btn-warning' onclick='removeThis(this);'>Remove</button>";
+    cell2.innerHTML = qu;
+    cell3.innerHTML = "<button class='btn btn-warning' onclick='removeThis(this);'>Remove</button>";
   }
 </script>
 <script type="text/javascript">
@@ -278,10 +219,10 @@ function removeThis(e){
     as.rows[i].cells[0].innerHTML = i;
   }
 }
-function alreadyExists(bnum){
+function alreadyExists(snum){
   var table = document.getElementById("myTable");
   for(var i=1;i<table.rows.length;i++){
-    if(table.rows[i].cells[2].innerHTML==bnum){
+    if(table.rows[i].cells[1].innerHTML==snum){
       return true;
     }
   }
@@ -302,28 +243,31 @@ function submitForm(){
   function(isConfirm){
     if(isConfirm){
     var ok = true;
-    var batches = "";
+    var drugs = "";
+    var uid = $("#uid").val();
     var table = document.getElementById("myTable");
     for(var i=1;i<table.rows.length;i++){
       var snum = table.rows[i].cells[1].innerHTML.split(" ~ ")[1];
-      batches = batches+snum+"^"+table.rows[i].cells[2].innerHTML+"^"+table.rows[i].cells[3].innerHTML+"^"+table.rows[i].cells[4].innerHTML+"^"+table.rows[i].cells[5].innerHTML+"=";
+      drugs = drugs+"="+snum+"^"+table.rows[i].cells[2].innerHTML;
     }
     $.ajax({
       type: "POST",
       url: "ajax.php",
       data:{
-         "addArrival" : true,
-         "batches" : batches
+         "invDrugRequest" : true,
+         "drugs" : drugs,
+         "uid" : uid
       },
       async: false,
       success: function(msg){
+        //alert(msg);
         if(msg!="ok"){
           ok = false;
         }
       }
     });
     if (ok) {
-        swal("Successfully Added!", "", "success");
+        swal("Successfully Sent!", "", "success");
         setTimeout('Redirect()',1500);
     }else if(!ok){
       swal("Server Error!", "", "error");
@@ -335,70 +279,6 @@ function submitForm(){
 function Redirect(){
   location.reload();
 }
-function dateFormat(date){
-  if((date.length!=10)){
-    return false;
-  }else{
-    ar = date.split("/");
-    if(ar.length!=3){
-      return false;
-    }else{
-      for(i=0;i<ar.length;i++){
-        if((parseInt(ar[i])=="NaN")){
-          return false;
-        }
-      }
-  var dd = parseInt(ar[1]);  
-  var mm  = parseInt(ar[0]);  
-  var yy = parseInt(ar[2]);  
-  // Create list of days of a month [assume there is no leap year by default]  
-  var ListofDays = [31,28,31,30,31,30,31,31,30,31,30,31]; 
-  if(mm>12){
-    return false;
-  }
-  if(mm<1){
-    return false;
-  }
-  if(dd<1){
-    return false;
-  }
-  if(yy<2010){
-    return false;
-  }
-  if(yy>2050){
-    return false;
-  }
-  
-  if (mm==1 || mm>2)  
-  {  
-  if (dd>ListofDays[mm-1])  
-  {
-  return false;  
-  }  
-  }
-  if (mm==2)  
-  {  
-  var lyear = false;  
-  if ( (!(yy % 4) && yy % 100) || !(yy % 400))   
-  {  
-  lyear = true;  
-  }  
-  if ((lyear==false) && (dd>=29))  
-  {  
-  return false;  
-  }  
-  if ((lyear==true) && (dd>29))  
-  {   
-  return false;  
-  }  
-  }
-      
-    }
-  }
-  return true;
-}
-
-
 </script>
 </body>
 </html>

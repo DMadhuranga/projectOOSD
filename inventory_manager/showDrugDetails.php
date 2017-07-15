@@ -66,8 +66,7 @@ if ($res){
         <th>Serial Number</th>  
         <th>Type</th>  
         <th>Description</th> 
-        <th>Show Details</th> 
-        <th>Edit Drug Details</th> 
+    <th>Show Details</th> 
       </tr>  
     </thead>  
     <tbody>
@@ -83,9 +82,7 @@ if ($res){
           <td><?php echo $drug->getDescription(); ?></td> 
           <td>
           <input type="" name="" hidden="" id=""></input>
-          <button type="button" id = "<?php echo $drug->getSerialNumber(); ?>" class="btn btn-info" onclick="eRedirect(this)">Show Details</button></td>
-          <td>
-          <button type="button" id = "<?php echo $drug->getSerialNumber(); ?>" class="btn btn-success" onclick="sRedirect(this)">Edit Drug Details </button></td>
+          <button type="button" id = "<?php echo $drug->getSerialNumber(); ?>" class="btn btn-warning" onclick="eRedirect(this)">Show Details</button></td>
 
         </tr> 
         
@@ -111,11 +108,6 @@ function Redirect(){
 function eRedirect(ele){
   var serial_number = ele.id;
   window.location.href=("drugdetails.php?serial_number="+serial_number);
-  //document.write(serial_number);
-}
-function sRedirect(ele){
-  var serial_number = ele.id;
-  window.location.href=("editdrugdetails.php?serial_number="+serial_number);
   //document.write(serial_number);
 }
 </script>

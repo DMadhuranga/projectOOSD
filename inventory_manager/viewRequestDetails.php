@@ -82,14 +82,14 @@ if ($user->getRoleId()!=2){
                                 <b><?php echo 'Sender : '?></b>
                                 <?php echo $sender.'<br>';?>
                                 <b><?php echo 'Status : '?></b>
-                                <?php if ($state==3 OR $state==4){
+                                <?php if ($state==4 OR $state==5 OR ($state==3 AND $description=="Dispensary Drug Request")){
                                     echo "Drugs issued";
-                                }
-                                elseif ($state==5){
-                                    echo "Rejected";
                                 }
                                 elseif ($state==2){
                                     echo "Accepted";
+                                }
+                                elseif ($state==3  AND $description=="Drug Return Order"){
+                                    echo "Rejected";
                                 }
 
                                 ?>

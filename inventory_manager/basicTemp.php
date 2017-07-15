@@ -169,18 +169,31 @@ function requests(){
 
     if(mysqli_num_rows($result)>0){
         while($row=mysqli_fetch_array($result)){
-            $id=$row['request_id'];
+            $u_id=$row['u_id'];
+            $queryName="SELECT u_name FROM hospital.users WHERE u_id='$u_id'";
+            $resName=mysqli_query($conn,$queryName);
+            $rowName=mysqli_fetch_array($resName,MYSQLI_ASSOC);
+            $sender=$rowName['u_name'];
             $message=$row['description'];
-            echo'<li><a href="viewRequestnDetails.php?id='. $row['request_id'].' ">
-                    <small><em>'.$row['date'].'</em></small><br />
-                    <srong><b>'.$message.'</b></srong><br />
+            if ($message=="Dispensary Drug Request") {
+                echo '<li><a href="issueDrugToDispensary.php?id=' . $row['request_id'] . ' ">
+                    <small><em>' . $row['date'] . '</em></small><br />
+                    <srong><b>' . $message . '</b></srong><br />
                     
                 </a></li>';
+            }
+            else{
+                echo '<li><a href="acceptReturnedDrugs.php?id=' . $row['request_id'] . ' &name='.$sender.'">
+                    <small><em>' . $row['date'] . '</em></small><br />
+                    <srong><b>' . $message . '</b></srong><br />
+                    
+                </a></li>';
+            }
         }
     }
 
     else{
-        echo'<li><a href ="#" class="text-bold text-italic">No New Notifications</a></li>';
+        echo'<li><a href ="#" class="text-bold text-italic">No New Requests</a></li>';
     }
 }
 ?>
