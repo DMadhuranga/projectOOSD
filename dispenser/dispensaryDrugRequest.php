@@ -5,9 +5,13 @@ include('../User.php');
 include('basicTemp.php');
 
 if(!isset($_SESSION['logged']) || !isset($_SESSION['user'])){
-  header('location:login.php');
+  header('location:../login.php');
 }
 $pages = $_SESSION['pages'];
+$user = unserialize($_SESSION['user']);
+if ($user->getRoleId()!=1){
+  header('location:../logout.php');
+}
 $drugs = array();
 $query = "select drug_name,serial_number,type from hospital.drugs where deleted=0";
 $res = mysqli_query($conn,$query);
@@ -32,7 +36,11 @@ if($res){
 .display-4-2{
   margin-left: 15px;
 }
-</style>
+</style>  
+<link rel="stylesheet" href="../assests/library/jquery-ui-1.12.1.custom/jquery-ui.structure.css" />
+<link rel="stylesheet" href="../assests/library/jquery-ui-1.12.1.custom/jquery-ui.theme.css" />
+<script src="../assests/library/jquery-ui-1.12.1.custom/jquery-ui.css"></script>
+<script src="../assests/library/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
 </head>
 <body>
 <div class='container-fluid'>
@@ -53,29 +61,20 @@ if($res){
     <div class='col-md-10' id="mb">
     <div class="row">
     <!-- Put Anything-->
-    <form>
-
-    </form>
-    <table id = "tb1">
-
-    </table>
-    <form>
-    
-    </form>
-    <div class="container">
+        <div class="container">
     <!--<h1 class="well">Add Drugs</h1>-->
     <div class="col-lg-12 well">
   <div class="row">
         
           <div class="col-md-10">
           <div class ="row">
-          <h1 class="display-4 display-4-2">Drug Issue</h1>
+          <h1 class="display-4 display-4-2">Drug Request</h1>
             <!--<label > Drug Cart</label>-->
           </div>
           </div>
           <div class="col-md-2">
           <div class="row">
-          <button id="sub" onclick="submitForm();"  type="button" class="btn btn-lg btn-info" name="addb" disabled="">Issue Drugs</button>
+          <button id="sub" onclick="submitForm();"  type="button" class="btn btn-lg btn-info" name="addb" disabled="">Send Request</button>
           <input id="uid" value="<?php echo $user->getUId(); ?>" name="" type="hidden">
           </div>
           </div>
@@ -87,40 +86,40 @@ if($res){
         <form method ='POST'>
           <div class="col-sm-12">
             <div class="row">
-              <div class="col-sm-5 form-group">
-                <label>Drug Name</label>
-                <select class="form-control" id="states" >
+              <div class="col-sm-6 form-group">
+                <label>Drug Name - Serial Number</label>
+                <select class="form-control" id="serialN" >
                 <object>Select</object>
                 <option value="" selected = "" disabled=""></option>
     <?php
     foreach($drugs as $drug){?>
-      <option value="<?php echo $drug['drug_name']." ~ ".$drug["serial_number"]; ?>"> <?php echo $drug['drug_name']."  -  ".$drug['serial_number']; ?></option>
+      <option value="<?php echo $drug["drug_name"]." ~ ".$drug['serial_number']; ?>"> <?php echo $drug['drug_name']."  -  ".$drug['serial_number']; ?></option>
     <?php }
     ?>
     </select>
               </div>
-              <div class="col-sm-4 form-group">
-                <label>Batch Number</label>
-                <select class="form-control" id="selectBN" value='' placeholder="Select a batch">
-                <option value="" selected = "" disabled="">Select</option>
-    
-    </select>
-              </div>
-              <div class="col-sm-3 form-group">
+              
+              <div class="col-sm-6 form-group">
                 <label>Quantity</label>
                 <input id="quantity" name="last_name"  type="text" placeholder="Enter Quantity" class="form-control">
               </div>
             </div>
-          <div class="row">
-          <div class="col-md-10">
-          </div>
-          <div class="col-md-2">
-          <div class="row">
-          <button  type="button" class="btn btn-lg btn-info" name="addb" onclick="addThisDrug();" >Add To Issue</button>
-          </div>
-          </div>
-          </div>
-          <!--<button  type="Submit" class="btn btn-lg btn-info" name="submitb" >Submit</button>  -->       
+            <div class="row">
+              <div class="col-sm-6 form-group">
+                <!--<label>Batch Number</label>
+                <input id="batchN" name= "u_name" type="text"  class="form-control">-->
+              </div>
+              <div class="col-sm-4 form-group">
+                <div class="form-group">
+                </div>
+              </div>
+              <div class="col-sm-2 form-group">
+                <div class="form-group">
+                  <label for="sel1"></label>
+                  <button id="addb"  type="button" class="btn btn-lg btn-info" name="addb" onclick="addThisDrug();" >Add To Request</button>
+                </div>
+              </div>
+            </div>      
           </div>
         </form> 
         </div>
@@ -128,117 +127,87 @@ if($res){
   <div class="col-lg-12 well">
   <table id="myTable" class="table table-striped">  
     <thead>  
-      <tr>  
-        <th>#</th>
-        <th>Drug Name - Serial Number</th>  
-        <th>Batch Number</th>  
+      <tr>
+        <th>#</th>   
+        <th>Drug Name - Serail Number</th>    
         <th>Quantity</th> 
         <th>Remove</th> 
       </tr>  
     </thead>  
     <tbody>
+      
     </tbody>  
   </table> 
   </div>
   </div>
+    
+    
     <!-- Put Anything-->
     </div>
     </div>
   </div>
 </div>
 <script src="../assests/library/select2-4.0.3/dist/js/select2.full.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+  $(".js-example-basic-single").select2();
+});
+</script>
 <script>
+
         $(document).ready(function() { 
-            $("#states").select2({
+            $("#serialN").select2({
                     placeholder: "Select a drug",
                     allowClear: true
              });
-            $('select').on('select2:select', function (evt) {
-          var value1 = $('select').val();
-          var ok = true;
-          value1 = value1.split(" ~ ")[1];
-          var newOptions = {};
-          $.ajax({
-                type: "POST",
-                url: "ajax.php",
-                data:{
-                   "nserial_number" : value1
-                },
-                async: false,
-                success: function(msg){
-                    
-                    if(msg!=""){
-                    var res = msg.split("+");
-                    for (i = 0; i < res.length; i++) {
-                var resr = res[i].split(" ");
-              newOptions[resr[0]+" "+resr[1]+" "+resr[2]] = resr[0]+" "+resr[2];
-            }
-            }else{
-              ok = false;
-            }
+        $( function() {
+        $( "#expireD" ).datepicker();
+        } );
+        $( function() {
+        $( "#arrivalD" ).datepicker();
+        } );
 
-                //pin number should return
-                }
-            });
-          var $el = $("#selectBN");
-        $el.empty(); // remove old options
-        if(ok){
-        $.each(newOptions, function(key,value) {
-            $el.append($("<option></option>").attr("value", value).text(key));
-        });
-        }
-      });
-
-        });
+       });
 </script>
 <script type="text/javascript">
 function addThisDrug(){
   var quantity = $("#quantity").val();
-  var batchN = $("#selectBN").val();
-  var states = $("#states").val();
-  
+  var states = $("#serialN").val();
   if(states==null){
     swal("Select a drug!", "", "error");
-  }else if(batchN==null){
-    swal("Not Available!", "Selected drug is not available", "error");
-  }else if(alreadyExists(batchN.split(" ")[0])){
-      swal("Batch already added!", "", "error");
   }else if(quantity==""){
     swal("Enter a quantity!", "", "error");
   }else if(isNaN(quantity)){
-    swal("Invalid Quantity!", "", "error");
+    swal("Quantity Error!", "", "error");
   }else if(parseInt(quantity)<=0){
     swal("Invalid Quantity!", "", "error");
   }else if(parseFloat(quantity)>parseInt(quantity)){
     swal("Invalid Quantity!", "", "error");
+  }else if(alreadyExists(states)){
+      swal("Drug already added!", "", "error");
   }else{
-    var availableQuantity = batchN.split(" ")[1];
-    if(availableQuantity<parseInt(quantity)){
-      swal("Quantity not available!", "Available Quantity is less", "error");
-    }else{
-      myAddARow(states,batchN.split(" ")[0],quantity);
       document.getElementById("sub").disabled = false;
+      myAddARow(states,quantity);
       document.getElementById('quantity').value = "";
-      document.getElementById('selectBN').value = "";
-    }
   }
+  
 }
 </script>
 <script type="text/javascript">
-function myAddARow(name,bnum,qu) {
+  function myAddARow(name,qu) {
     var table = document.getElementById("myTable");
     var row = table.insertRow(table.rows.length);
     var cell0 = row.insertCell(0);
     var cell1 = row.insertCell(1);
     var cell2 = row.insertCell(2);
     var cell3 = row.insertCell(3);
-    var cell4 = row.insertCell(4);
     cell0.innerHTML = table.rows.length-1;
     cell1.innerHTML = name;
-    cell2.innerHTML = bnum;
-    cell3.innerHTML = qu;
-    cell4.innerHTML = "<button class='btn btn-warning' onclick='removeThis(this);'>Remove</button>";
-}
+    cell2.innerHTML = qu;
+    cell3.innerHTML = "<button class='btn btn-warning' onclick='removeThis(this);'>Remove</button>";
+  }
+</script>
+<script type="text/javascript">
 function removeThis(e){
   var currentRow = e.parentElement.parentElement.rowIndex;
   document.getElementById("myTable").deleteRow(currentRow);
@@ -250,38 +219,17 @@ function removeThis(e){
     as.rows[i].cells[0].innerHTML = i;
   }
 }
-function alreadyExists(bnum){
+function alreadyExists(snum){
   var table = document.getElementById("myTable");
   for(var i=1;i<table.rows.length;i++){
-    if(table.rows[i].cells[2].innerHTML==bnum){
+    if(table.rows[i].cells[1].innerHTML==snum){
       return true;
     }
   }
   return false;
 }
-function Redirect(){
-  location.reload();
-}
 function submitForm(){
   swal({
-    title: "Enter Patient Id!",
-    text: "",
-    type: "input",
-    showCancelButton: true,
-    closeOnConfirm: false,
-    animation: "slide-from-top",
-    inputPlaceholder: "Patient Id"
-  },
-  function(inputValue){
-    if (inputValue === false) return false;
-    
-    if (inputValue === "") {
-      swal.showInputError("You need to enter Patient Id!");
-      return false
-    }
-    
-    //swal("Nice!", "You wrote: ", "success");
-    swal({
     title: "Are you sure?",
     text: "",
     type: "warning",
@@ -300,17 +248,15 @@ function submitForm(){
     var table = document.getElementById("myTable");
     for(var i=1;i<table.rows.length;i++){
       var snum = table.rows[i].cells[1].innerHTML.split(" ~ ")[1];
-      drugs = drugs+"="+snum+"^"+table.rows[i].cells[2].innerHTML+"^"+table.rows[i].cells[3].innerHTML;
+      drugs = drugs+"="+snum+"^"+table.rows[i].cells[2].innerHTML;
     }
-    //alert(inputValue);
     $.ajax({
       type: "POST",
       url: "ajax.php",
       data:{
-         "disDrugIssue" : true,
+         "disDrugRequest" : true,
          "drugs" : drugs,
-         "uid" : uid,
-         "pid" : inputValue
+         "uid" : uid
       },
       async: false,
       success: function(msg){
@@ -329,7 +275,9 @@ function submitForm(){
   }
     
   });
-  });
+}
+function Redirect(){
+  location.reload();
 }
 </script>
 </body>

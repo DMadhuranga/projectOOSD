@@ -167,11 +167,20 @@ function requests()
         while ($row = mysqli_fetch_array($result)) {
             $id = $row['request_id'];
             $message = $row['description'];
-            echo '<li><a href="viewRequestnDetails.php?id=' . $row['request_id'] . ' ">
+            if ($message=='Drug Return Order'){
+                echo '<li><a href="returnDrugs.php?id=' . $id . ' &date='.$row['date'].'&name='.$row['u_id'].' ">
                     <small><em>' . $row['date'] . '</em></small><br />
                     <srong><b>' . $message . '</b></srong><br />
                     
                 </a></li>';
+            }
+            else {
+                echo '<li><a href="acceptDrugDelivery.php?id=' . $id . ' ">
+                    <small><em>' . $row['date'] . '</em></small><br />
+                    <srong><b>' . $message . '</b></srong><br />
+                    
+                </a></li>';
+            }
         }
     } else {
         echo '<li><a href ="#" class="text-bold text-italic">No New Notifications</a></li>';

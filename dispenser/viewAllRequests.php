@@ -60,7 +60,7 @@ if ($user->getRoleId()!=1){
                     if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };
                     $results_per_page = 10;
                     $start_from = ($page-1) * $results_per_page;
-                    $query_total="SELECT * FROM hospital.requests WHERE (sending_dept='1' AND receiving_dept='0' AND state='3') OR (sending_dept='2' AND receiving_dept='1' AND state='0')";
+                    $query_total="SELECT * FROM hospital.requests WHERE (sending_dept='1' AND receiving_dept='0' AND (state='3' OR state='4' OR state='5')) OR (sending_dept='2' AND receiving_dept='1')";
                     $res_total=mysqli_query($conn,$query_total);
                     $count=mysqli_num_rows($res_total);
                     $total_pages=ceil($count/$results_per_page);
@@ -70,26 +70,26 @@ if ($user->getRoleId()!=1){
                         switch(strtolower(trim($_GET['sort'])))
                         {
                             case 'date':
-                                $sort='date';
+                                $sort='date DESC';
                                 break;
                             case 'request':
-                                $sort='sending_dept';
+                                $sort='sending_dept ASC';
                                 break;
                             case 'sender':
-                                $sort='u_id';
+                                $sort='u_id ASC';
                                 break;
                             case 'view':
-                                $sort="FIELD(state,3,0,4,1)";
+                                $sort="FIELD(state,0,3,2,4,1,5) ASC";
                                 break;
                         }
 
 
                     }
                     else{
-                        $sort="FIELD(state,3,0,4,1)";
+                        $sort="FIELD(state,0,3,2,4,1,5) ASC";
                     }
 
-                    $query="SELECT * FROM hospital.requests WHERE (sending_dept='1' AND receiving_dept='0' AND (state='3' OR state='4')) OR (sending_dept='2' AND receiving_dept='1' AND (state='0' OR state='1')) ORDER BY $sort ASC LIMIT $start_from,".$results_per_page;
+                    $query="SELECT * FROM hospital.requests WHERE (sending_dept='1' AND receiving_dept='0' AND (state='3' OR state='4' OR state='5')) OR (sending_dept='2' AND receiving_dept='1') ORDER BY $sort LIMIT $start_from,".$results_per_page;
                     $res=mysqli_query($conn,$query);
                     if ($res) {
                         $requests = array();
@@ -116,12 +116,18 @@ if ($user->getRoleId()!=1){
                                 <td><?php echo $date; ?></td>
                                 <td><?php echo $description; ?></td>
                                 <td><?php echo $sender; ?></td>
-                                <?php if ($request[1] ==0 OR $request[1]==3) { ?>
-                                    <td><a type="button" class="btn btn-primary" href="#?id=<?php echo $request_id;?>"> Take Action </a></td>
+                                <?php if ($request[1] ==0){?>
+                                    <td><a type="button" class="btn btn-primary" href="returnDrugs.php?id=<?php echo $request_id;?> &name=<?php echo $sender_id?>"> Take Action </a></td>
                                     <?php
-                                } else{?>
-                                    <td><a type="button" class="btn btn-success" href="viewRequestDetails.php?id=<?php echo $request_id;?> & name=<?php echo $sender?>">View Request</a></td>
-                                <?php }?>
+                                } elseif($request[1]==3 AND $description=="Dispensary Drug Request") { ?>
+                                    <td><a type="button" class="btn btn-primary" href="acceptDrugDelivery.php?id=<?php echo $request_id;?>"> Take Action </a></td>
+                                    <?php
+                                } elseif($request[1]==5){?>
+                                    <td><a type="button" class="btn btn-danger" href="viewRequestDetails.php?id=<?php echo $request_id;?> & name=<?php echo $sender?>">View Request</a></td>
+                                <?php
+                            } else{?>
+                            <td><a type="button" class="btn btn-success" href="viewRequestDetails.php?id=<?php echo $request_id;?> & name=<?php echo $sender?>">View Request</a></td>
+                        <?php }?>
                             </tr>
                             <?php
                         }
@@ -134,19 +140,19 @@ if ($user->getRoleId()!=1){
                     <?php if ( $page<=1){?>
                         <li class="disabled"><a href="">Previous</a> </li>
                     <?php }else {?>
-                        <li><a href="viewAllRequests.php?page=<?php echo $page-1;?>">Previous</a></li><?php }?>
+                        <li><a href="viewAllRequests.php?page=<?php echo $page-1;?>&sort=<?php echo $_GET['sort']?>">Previous</a></li><?php }?>
 
                     <?php  for ($i=1; $i<=$total_pages; $i++) {
                         if($i==$page){?>
-                            <li class="active"><a href="viewAllRequests.php?page=<?php echo $i;?>"><?php echo $i?></a></li>
+                            <li class="active"><a href="viewAllRequests.php?page=<?php echo $i;?>&sort=<?php echo $_GET['sort']?>"><?php echo $i?></a></li>
                         <?php }
                         else{?>
-                            <li><a href="viewAllRequests.php?page=<?php echo $i;?>"><?php echo $i?></a></li>
+                            <li><a href="viewAllRequests.php?page=<?php echo $i;?>&sort=<?php echo $_GET['sort']?>"><?php echo $i?></a></li>
                         <?php }}?>
                     <?php if ( $page>=$total_pages){?>
                         <li class="disabled"><a href="">Next</a> </li>
                     <?php }else {?>
-                        <li><a href="viewAllRequests.php?page=<?php echo $page+1;?>">Next</a></li><?php }?>
+                        <li><a href="viewAllRequests.php?page=<?php echo $page+1;?>&sort=<?php echo $_GET['sort']?>">Next</a></li><?php }?>
                 </ul>
 
                 <!-- Put Anything-->

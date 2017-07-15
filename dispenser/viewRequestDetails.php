@@ -82,10 +82,13 @@ if ($user->getRoleId()!=1){
                                 <b><?php echo 'Sender : '?></b>
                                 <?php echo $sender.'<br>';?>
                                 <b><?php echo 'Status : '?></b>
-                                <?php if ($state==4){
+                                <?php if ($state==5){
+                                    echo "Rejected";
+                                }
+                                elseif ($state==4){
                                     echo "Accepted";
                                 }
-                                elseif ($state==1){
+                                else{
                                     echo "Dugs Issued";
                                 }
 
@@ -149,58 +152,3 @@ if ($user->getRoleId()!=1){
 </body>
 </html>
 
-
-<?php function expiry(){?>
-    <b><?php echo 'Date :';?></b>
-    <?php echo $_REQUEST['date'].'<br>';?>
-    <?php $message=$_REQUEST['msg'];
-    $pieces=explode("drug ",$message);
-    $pieces=explode(" (serial number",$pieces[1]);
-    $drug_name=$pieces[0];
-    $pieces=explode(") ",$pieces[1]);
-    $serial=$pieces[0];
-    $pieces=explode("batch no. ",$pieces[1]);
-    $pieces=explode(" will expire",$pieces[1]);
-    $batch=$pieces[0];
-    $pieces=explode(" in ",$pieces[1]);
-    $days=$pieces[1];?>
-    <b><?php echo "Drug Name : "?></b>
-    <?php echo $drug_name.'<br>';?>
-    <b><?php echo "Serial Number : "?></b>
-    <?php echo $serial.'<br>';?>
-    <b><?php echo "Batch Number : "?></b>
-    <?php echo $batch.'<br>';?>
-    <b><?php echo "Days to Expire : "?></b>
-    <?php echo $days.'<br>';
-    $conn = mysqli_connect('localhost', 'root', '1010');
-    $query="SELECT inventory_balance FROM hospital.drug_batches WHERE batch_number='$batch'";
-    $res=mysqli_query($conn,$query);
-    $row=mysqli_fetch_array($res,MYSQLI_ASSOC);
-    $balance=$row['inventory_balance']
-    ?>
-    <b><?php echo "Balance : "?></b>
-    <?php echo $balance.'<br>';
-
-}?>
-<?php function stockLow(){?>
-    <b><?php echo 'Date :';?></b>
-    <?php echo $_REQUEST['date'].'<br>';?>
-    <?php $message=$_REQUEST['msg'];
-    $pieces=explode("drug ",$message);
-    $pieces=explode(" (serial number",$pieces[1]);
-    $drug_name=$pieces[0];
-    $pieces=explode(") ",$pieces[1]);
-    $serial=$pieces[0];
-    $pieces=explode("amount: ",$pieces[1]);
-    $balance=$pieces[1];?>
-    <b><?php echo "Drug Name : "?></b>
-    <?php echo $drug_name.'<br>';?>
-    <b><?php echo "Serial Number : "?></b>
-    <?php echo $serial.'<br>';?>
-    <b><?php echo "Balance : "?></b>
-    <?php echo $balance.'<br>';
-
-}
-/**
- * other notifications
- */
