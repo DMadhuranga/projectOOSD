@@ -80,15 +80,18 @@ if ($user->getRoleId()!=0){
                                 <b><?php echo 'Date : '?></b>
                                 <?php echo $date.'<br>';?>
                                 <b><?php echo 'Sender : '?></b>
-                                <?php echo $sender.'<br>';?>
-                                <b><?php echo 'Status : '?></b>
-                                <?php if ($state==2){
-                                    echo "Rejected";
-                                }
-                                else{
-                                    echo "Accepted";
-                                }
+                                <?php echo $sender.'<br>';
 
+                                if ($state!=0) {
+                                    ?>
+
+                                    <b><?php echo 'Status : ' ?></b>
+                                    <?php if ($state == 2) {
+                                        echo "Rejected";
+                                    } else {
+                                        echo "Accepted";
+                                    }
+                                }
                                 ?>
 
                             </div>
@@ -135,11 +138,18 @@ if ($user->getRoleId()!=0){
                         <div class="form-group" >
                             <div class="col-md-4"></div>
 
-
+                                <?php if($state!=0){?>
                                 <button id="addb"  type="button" class="btn btn-lg btn-info" onclick="location.href='viewAllRequests.php'" ><span class="glyphicon glyphicon-arrow-left"></span> Back</button>
                                 <div class="col-md-1">
                                     <button id="addb"  type="button" class="btn btn-lg btn-success" onclick="location.href='home.php'" ><span class="glyphicon glyphicon-home"></span> Home</button>
                                 </div>
+                            <?php }
+                            else{?>
+                                <a id="addb"  type="button" class="btn btn-lg btn-danger"  onclick="return update(<?php echo $request_id?>,'0')" href="redirect.php" >Reject</a>
+                                <div class="col-md-1">
+                                    <a id="addb"  type="button" class="btn btn-lg btn-success" onclick="return update(<?php echo $request_id?>,'1');" href='redirect.php'>Accept</a>
+                                </div>
+                            <?php }?>
                             <div class="col-md-3"></div>
 
                     </div>
@@ -148,5 +158,26 @@ if ($user->getRoleId()!=0){
 </div>
 </body>
 </html>
+
+
+<script type="text/javascript">
+    function update(request_id,state) {
+        //alert(state);
+        //alert(request_id)
+        $.ajax({
+            url: "dbUpdateRequest.php",
+            type: "POST",
+            data: { 'rid': request_id,
+                    'state':state
+            },
+/*
+            success: function(data)
+             {
+             alert(data);
+             }*/
+        });
+        return true;
+    }
+</script>
 
 

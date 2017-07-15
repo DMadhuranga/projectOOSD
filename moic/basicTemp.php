@@ -172,7 +172,12 @@ function requests(){
         while($row=mysqli_fetch_array($result)){
             $id=$row['request_id'];
             $message=$row['description'];
-            echo'<li><a href="viewRequestDetails.php?id='. $row['request_id'].' ">
+            $sender_id=$row['u_id'];
+            $queryUser="SELECT u_name FROM hospital.users WHERE u_id=$sender_id";
+            $resultUser=mysqli_query($conn,$queryUser);
+            $rowUser=mysqli_fetch_array($resultUser,MYSQLI_ASSOC);
+            $sender=$rowUser['u_name'];
+            echo'<li><a href="viewRequestDetails.php?id='. $row['request_id'].' &name='.$sender.' ">
                     <small><em>'.$row['date'].'</em></small><br />
                     <srong><b>'.$message.'</b></srong><br />
                     
@@ -181,7 +186,7 @@ function requests(){
         }
 
     else{
-        echo'<li><a href ="#" class="text-bold text-italic">No New Notifications</a></li>';
+        echo'<li><a href ="#" class="text-bold text-italic">No New Requests</a></li>';
     }
 }
 ?>

@@ -71,27 +71,30 @@ if ($user->getRoleId()!=0){
                         switch(strtolower(trim($_GET['sort'])))
                         {
                             case 'date':
-                                $sort='date';
+                                $sort='date DESC';
                                 break;
                             case 'request':
-                                $sort='sending_dept';
+                                $sort='sending_dept ASC';
                                 break;
                             case 'sender':
-                                $sort='u_id';
+                                $sort='u_id ASC';
                                 break;
                             case 'view':
-                                $sort='state';
+                                $sort="FIELD(state,0,1,3,4,5,2) ASC";
+                                //$sort='state ASC';
                                 break;
                         }
-
-
                     }
+
                     else{
-                        $sort='state';
+                        $sort="FIELD(state,0,1,3,4,5,2) ASC";
                     }
 
 
-                    $query="SELECT * FROM hospital.requests WHERE receiving_dept='0'  ORDER BY $sort ASC LIMIT $start_from,".$results_per_page;
+
+
+
+                    $query="SELECT * FROM hospital.requests WHERE receiving_dept='0'  ORDER BY $sort LIMIT $start_from,".$results_per_page;
                     $res=mysqli_query($conn,$query);
                     if ($res) {
                         $requests = array();
@@ -119,7 +122,7 @@ if ($user->getRoleId()!=0){
                                 <td><?php echo $description; ?></td>
                                 <td><?php echo $sender; ?></td>
                                 <?php if ($request[1] ==0) { ?>
-                                    <td><a type="button" class="btn btn-primary" href="#?id=<?php echo $request_id;?>"> Take Action </a></td>
+                                    <td><a type="button" class="btn btn-primary" href="viewRequestDetails.php?id=<?php echo $request_id;?>& name=<?php echo $sender?>"> Take Action </a></td>
                                     <?php
                                 } elseif($request[1]==2){?>
                                     <td><a type="button" class="btn btn-danger" href="viewRequestDetails.php?id=<?php echo $request_id;?> & name=<?php echo $sender?>">View Request</a></td>
@@ -139,19 +142,19 @@ if ($user->getRoleId()!=0){
                     <?php if ( $page<=1){?>
                         <li class="disabled"><a href="">Previous</a> </li>
                     <?php }else {?>
-                        <li><a href="viewAllRequests.php?page=<?php echo $page-1;?>">Previous</a></li><?php }?>
+                        <li><a href="viewAllRequests.php?page=<?php echo $page-1;?>&sort=<?php echo $_GET['sort']?>">Previous</a></li><?php }?>
 
                     <?php  for ($i=1; $i<=$total_pages; $i++) {
                         if($i==$page){?>
-                            <li class="active"><a href="viewAllRequests.php?page=<?php echo $i;?>"><?php echo $i?></a></li>
+                            <li class="active"><a href="viewAllRequests.php?page=<?php echo $i;?>&sort=<?php echo $_GET['sort']?>"><?php echo $i?></a></li>
                         <?php }
                         else{?>
-                            <li><a href="viewAllRequests.php?page=<?php echo $i;?>"><?php echo $i?></a></li>
+                            <li><a href="viewAllRequests.php?page=<?php echo $i;?>&sort=<?php echo $_GET['sort']?>"><?php echo $i?></a></li>
                         <?php }}?>
                     <?php if ( $page>=$total_pages){?>
                         <li class="disabled"><a href="">Next</a> </li>
                     <?php }else {?>
-                        <li><a href="viewAllRequests.php?page=<?php echo $page+1;?>">Next</a></li><?php }?>
+                        <li><a href="viewAllRequests.php?page=<?php echo $page+1;?>&sort=<?php echo $_GET['sort']?>">Next</a></li><?php }?>
                 </ul>
 
                 <!-- Put Anything-->
@@ -162,20 +165,4 @@ if ($user->getRoleId()!=0){
 </div>
 </body>
 </html>
-<!--<script type="text/javascript">
-    function update(nid) {
-        //alert(nid);
-        $.ajax({
-            url: "dbUpdate.php",
-            type: "POST",
-            data: { 'nid': nid },
-            /*success: function(data)
-             {
-             alert(data);
-             }*/
-        });
-        return true;
-    }
-</script>
--->
 

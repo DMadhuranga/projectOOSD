@@ -75,11 +75,11 @@ if ($res){
         <th>Batch Number</th>  
         <th>Arrival Date</th>  
         <th>Expire Date</th>  
-      <!--  <th>Arrival Amount</th>
-        <th>Inventory Amount</th> -->
+        <th>Arrival Amount</th>
+        <th>Inventory Amount</th> 
       <th>Dispensary Balance</th> 
-   <!--   <th>Other Department Balance</th>
-      <th>Total Balance</th>-->
+      <th>Other Department Balance</th>
+      <th>Total Balance</th>
       </tr>  
     </thead>  
     <tbody>
@@ -90,11 +90,11 @@ if ($res){
           <td><?php echo $batch->getBatch_number();?></td>   
           <td><?php echo $batch->getArrival(); ?></td>  
           <td><?php echo $batch->getExpire(); ?></td>       
-          <!--<td><?php echo $batch->getArrival_amount(); ?></td> -->
-          <!--<td><?php echo $batch->getInventory_balance(); ?></td> -->
+          <td><?php echo $batch->getArrival_amount(); ?></td> 
+          <td><?php echo $batch->getInventory_balance(); ?></td> 
           <td><?php echo $batch->getDispensary_balance(); ?></td> 
-         <!-- <td><?php echo $batch->getOther_department_balance(); ?></td> 
-          <td><?php echo $batch->getTotal_balance(); ?></td> -->
+          <td><?php echo $batch->getOther_department_balance(); ?></td> 
+          <td><?php echo $batch->getTotal_balance(); ?></td> 
         </tr> 
         
       <?php

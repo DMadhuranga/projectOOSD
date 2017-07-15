@@ -15,6 +15,8 @@ if(!isset($_SESSION['logged']) || !isset($_SESSION['user'])){
     header('location:../login.php');
 }
 $pages = $_SESSION['pages'];
+
+
 $user = unserialize($_SESSION['user']);
 if ($user->getRoleId()!=0){
     header('location:../logout.php');

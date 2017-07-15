@@ -22,9 +22,10 @@ if ($user->getRoleId()!=0){
 <body>
 <div class='container-fluid'>
   <div class='row'>
-    <div class='col-md-2 col-md-2-height1'>
+    <div class='col-xs-12 col-xs-12-height1 col-md-2 col-md-2-height1' id="sideB">
     <div class = "row">
     <ul class="nav nav-pills nav-stacked">
+    <input type="hidden" value="<?php echo sizeof($pages);?>" id="nop">
       <?php
       foreach( $pages as $tempPag ) {?>
         <li><a href="<?php echo $tempPag[1]; ?>"><?php echo $tempPag[0]; ?></a></li>
@@ -34,7 +35,7 @@ if ($user->getRoleId()!=0){
     </ul>
     </div>
     </div>
-    <div class='col-md-10'>
+    <div class='col-xs-12 col-md-10'  id="mb">
     <div class="row">
     <!-- Put Anything-->
     
@@ -45,6 +46,8 @@ if ($user->getRoleId()!=0){
     </div>
   </div>
 </div>
+<script type="text/javascript">
+</script>
 </body>
 </html>
 
