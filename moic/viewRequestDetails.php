@@ -18,9 +18,10 @@ if ($user->getRoleId()!=0){
 
 <html xmlns="http://www.w3.org/1999/html">
 <head>
-
+    <link href="../assests/library/sweetAlert2/sweetalert2.min.css" rel="stylesheet"/>
 </head>
 <body>
+
 <div class='container-fluid'>
     <div class='row'>
         <div class='col-md-2 col-md-2-height1'>
@@ -145,9 +146,10 @@ if ($user->getRoleId()!=0){
                                 </div>
                             <?php }
                             else{?>
-                                <a id="addb"  type="button" class="btn btn-lg btn-danger"  onclick="return update(<?php echo $request_id?>,'0')" href="redirect.php" >Reject</a>
+                                <button class="btn btn-lg btn-danger" onclick="reject(<?php echo $request_id?>,'2')">Reject</button>
+                                <!--<a id="addb"  type="button" class="btn btn-lg btn-danger"  onclick="return update(<?php //echo $request_id?>,'0')" href="redirect.php" >Reject</a>-->
                                 <div class="col-md-1">
-                                    <a id="addb"  type="button" class="btn btn-lg btn-success" onclick="return update(<?php echo $request_id?>,'1');" href='redirect.php'>Accept</a>
+                                    <button class="btn btn-lg btn-success" onclick="accept(<?php echo $request_id?>,'1')" >Accept</button>
                                 </div>
                             <?php }?>
                             <div class="col-md-3"></div>
@@ -156,10 +158,85 @@ if ($user->getRoleId()!=0){
         </div>
     </div>
 </div>
+            <script src="../assests/library/sweetAlert2/sweetalert2.min.js"></script>
+            <script type="text/javascript">
+                function reject(request_id,state) {
+                    id=request_id;
+                    action=state;
+                    swal({
+                        title: 'Reason to reject the request',
+                        input: 'text',
+                        showCancelButton: true,
+                        inputValidator: function (value) {
+                            return new Promise(function (resolve, reject) {
+                                if (value) {
+                                    resolve()
+                                } else {
+                                    reject('You need to enter reason to reject!')
+                                }
+                            })
+                        }
+                    /*}).then(function (result) {
+                        swal({
+                            type: 'success',
+                            html: 'You entered: ' + result,
+                            return result
+                        })
+*/
+                    }).then(function update(result) {
+                        msg=result;
+                        $.ajax({
+                            url: "dbUpdateRequest.php",
+                            type: "POST",
+                            data: { 'rid': id,
+                                'state':action,
+                                'comment':msg
+                            },
+                            /*
+                             success: function(data)
+                             {
+                             alert(data);
+                             }*/
+                        });
+                        return true;
+                    }).then(function () {
+                        window.location.href="redirect.php"
+                    })
+                }
+
+            </script>
+            <script type="text/javascript">
+                function accept(request_id,state) {
+                    id=request_id;
+                    action=state;
+                    swal(
+                        'Accepted!',
+                        'Request has been forwarded to Inventory Manager.',
+                        'success'
+                    ).then(function update() {
+                        $.ajax({
+                            url: "dbUpdateRequest.php",
+                            type: "POST",
+                            data: { 'rid': id,
+                                'state':action,
+                                'comment':""
+                            },
+
+                             /*success: function(data)
+                             {
+                             alert(data);
+                             }*/
+                        });
+                        return true;
+                    }).then(function () {
+                        window.location.href="redirect.php"
+                    })
+                }
+            </script>
 </body>
 </html>
 
-
+<!--
 <script type="text/javascript">
     function update(request_id,state) {
         //alert(state);
@@ -178,6 +255,6 @@ if ($user->getRoleId()!=0){
         });
         return true;
     }
-</script>
+</script>-->
 
 
