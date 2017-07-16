@@ -5,57 +5,57 @@ include('../User.php');
 include('basicTemp.php');
 
 if(!isset($_SESSION['logged']) || !isset($_SESSION['user'])){
-  header('location:../login.php');
+    header('location:../login.php');
 }
 $pages = $_SESSION['pages'];
 $user = unserialize($_SESSION['user']);
 if ($user->getRoleId()!=1){
-  header('location:../logout.php');
+    header('location:../logout.php');
 }
 ?>
 
 
-<html>
-<head>
+    <html>
+    <head>
 
-</head>
-<body>
-<div class='container-fluid'>
-  <div class='row'>
-    <div class='col-md-2 col-md-2-height1'>
-    <div class = "row">
-    <ul class="nav nav-pills nav-stacked">
-      <?php
-      foreach( $pages as $tempPag ) {?>
-        <li><a href="<?php echo $tempPag[1]; ?>"><?php echo $tempPag[0]; ?></a></li>
-      <?php      
-      }; 
-?>
-    </ul>
-    </div>
-    </div>
-    <div class='col-md-10'>
-    <div class="row">
-    <!-- Put Anything-->
-    <div class="container">
-                    <!--<h1 class="well">Add Drugs</h1>-->
-                    <div class="col-lg-12 well">
-                        <div class="row">
+    </head>
+    <body>
+    <div class='container-fluid'>
+        <div class='row'>
+            <div class='col-md-2 col-md-2-height1'>
+                <div class = "row">
+                    <ul class="nav nav-pills nav-stacked">
+                        <?php
+                        foreach( $pages as $tempPag ) {?>
+                            <li><a href="<?php echo $tempPag[1]; ?>"><?php echo $tempPag[0]; ?></a></li>
+                            <?php
+                        };
+                        ?>
+                    </ul>
+                </div>
+            </div>
+            <div class='col-md-10'>
+                <div class="row">
+                    <!-- Put Anything-->
+                    <div class="container">
+                        <!--<h1 class="well">Add Drugs</h1>-->
+                        <div class="col-lg-12 well">
+                            <div class="row">
 
-                            <div class="col-md-10" style="text-align: center">
-                                <div class ="row">
-                                    <h3 class="display-4 display-4-2" ><?php echo $_REQUEST['title'];?></h3>
-                                    <!--<label > Drug Cart</label>-->
+                                <div class="col-md-10" style="text-align: center">
+                                    <div class ="row">
+                                        <h3 class="display-4 display-4-2" ><?php echo $_REQUEST['title'];?></h3>
+                                        <!--<label > Drug Cart</label>-->
+                                    </div>
                                 </div>
+                                <!--<div class="col-md-2">
+                                    <div class="row">
+                                        <button id="sub" onclick="submitForm();"  type="button" class="btn btn-lg btn-info" name="addb" disabled="">Add Arrival</button>
+                                    </div>
+                                </div>-->
+
                             </div>
-                            <!--<div class="col-md-2">
-                                <div class="row">
-                                    <button id="sub" onclick="submitForm();"  type="button" class="btn btn-lg btn-info" name="addb" disabled="">Add Arrival</button>
-                                </div>
-                            </div>-->
-
                         </div>
-                    </div>
                         <div class="col-lg-12 well">
 
                             <div class="col-lg-12" style="font-size: medium; text-align: left; line-height: 200%">
@@ -69,33 +69,36 @@ if ($user->getRoleId()!=1){
                                 elseif($type==1){
                                     stockLow($_REQUEST['id']);
                                 }
+                                elseif($type==2){
+                                    other();
+                                }
                                 ?>
 
                             </div>
-							 </div>
-                    <div class="col-sm-10 form-group">
-                        <div class="form-group" >
-                            <div class="col-md-4"></div>
-
-
-                            <button id="addb"  type="button" class="btn btn-lg btn-info" onclick="location.href='viewAllNotifications.php'" ><span class="glyphicon glyphicon-th-list"></span> View All</button>
-                            <div class="col-md-1">
-                                <button id="addb"  type="button" class="btn btn-lg btn-success" onclick="location.href='home.php'" ><span class="glyphicon glyphicon-home"></span> Home</button>
-                            </div>
-                            <div class="col-md-3"></div>
-
                         </div>
+                        <div class="col-sm-10 form-group">
+                            <div class="form-group" >
+                                <div class="col-md-4"></div>
+
+
+                                <button id="addb"  type="button" class="btn btn-lg btn-info" onclick="location.href='viewAllNotifications.php'" ><span class="glyphicon glyphicon-th-list"></span> View All</button>
+                                <div class="col-md-1">
+                                    <button id="addb"  type="button" class="btn btn-lg btn-success" onclick="location.href='home.php'" ><span class="glyphicon glyphicon-home"></span> Home</button>
+                                </div>
+                                <div class="col-md-3"></div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Put Anything-->
+                </div>
+            </div>
         </div>
     </div>
-    
-    
-    <!-- Put Anything-->
-    </div>
-    </div>
-  </div>
-</div>
-</body>
-</html>
+    </body>
+    </html>
 
 <?php function expiry(){?>
     <b><?php echo 'Date :';?></b>
@@ -128,8 +131,8 @@ if ($user->getRoleId()!=1){
     <b><?php echo "Balance : "?></b>
     <?php echo $balance.'<br>';
 
-}?>
-<?php function stockLow(){?>
+}
+function stockLow(){?>
     <b><?php echo 'Date :';?></b>
     <?php echo $_REQUEST['date'].'<br>';?>
     <?php $message=$_REQUEST['msg'];
@@ -148,7 +151,28 @@ if ($user->getRoleId()!=1){
     <?php echo $balance.'<br>';
 
 }
-/**
- * other notifications
- */
 
+function other(){?>
+    <b><?php echo 'Date :';?></b>
+    <?php echo $_REQUEST['date'].'<br>';?>
+    <?php $message=$_REQUEST['msg'];
+    $id=$_REQUEST['id'];
+    $pieces=explode("was ",$message);
+    $pieces=explode("!(",$pieces[1]);
+    $status=$pieces[0];
+    $pieces=explode(") ",$pieces[1]);
+    $request_id=$pieces[0];
+    $comment=$pieces[1];?>
+    <b><?php echo "Status : "?></b>
+    <?php echo $status.'<br>';?>
+    <b><?php echo "Comments : "?></b>
+    <?php echo $comment.'<br>';
+
+    //viewRequestDetails.php?id=22 & name=Dis1?>
+    <div class="col-lg-0" style="margin-top:30px" ></div>
+    <div class="col-md-0"></div>
+    <a type="button" class="btn btn-lg btn-primary" href='viewRejectedRequest.php?id=<?php echo $request_id?>&status=<?php echo $status?>'>View Request</a>
+
+
+    <?php
+}

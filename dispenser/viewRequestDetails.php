@@ -89,7 +89,7 @@ if ($user->getRoleId()!=1){
                                     echo "Accepted";
                                 }
                                 else{
-                                    echo "Dugs Issued";
+                                    echo "Drugs Issued";
                                 }
 
                                 ?>
