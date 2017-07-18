@@ -1,17 +1,11 @@
-<?php
-include("User.php");
-if(isset($_SESSION['user'])){
-  $user = unserialize($_SESSION['user']);
-}
-?>
 <html>
 <head>
 <title>home page</title>
-<link rel="stylesheet" href="assests/library/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="../assests/library/bootstrap-3.3.7-dist/css/bootstrap.min.css">
 
 <!-- Optional theme -->
-<link rel="stylesheet" href="assests/library/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
-<link rel="stylesheet" type="text/css" href="assests/library/sweetalert-master/dist/sweetalert.css">
+<link rel="stylesheet" href="../assests/library/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
+<link rel="stylesheet" type="text/css" href="../assests/library/sweetalert-master/dist/sweetalert.css">
 <style type='text/css'>
 .col-md-2-height1 {
 	height: 1200px;
@@ -28,9 +22,8 @@ if(isset($_SESSION['user'])){
 </head>
 <body>
 <header>
-  <div class="container-fluid">
 <nav class="navbar navbar-default navbar-default-nopaddingup">
-
+  <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -40,7 +33,7 @@ if(isset($_SESSION['user'])){
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand1" href="#">
-	  <img alt="Bitz" src="images/logo.png" style="width:50px;height:50px;">
+	  <img alt="Bitz" src="../images/logo.png" style="width:50px;height:50px;">
         
       </a>
     </div>
@@ -49,7 +42,7 @@ if(isset($_SESSION['user'])){
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <!--<li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>-->
-        <li><a href="basic.php">Home</a></li>
+        <li><a href="home.php">Home</a></li>
       </ul>
       <form class="navbar-form navbar-left">
         <div class="form-group">
@@ -61,20 +54,20 @@ if(isset($_SESSION['user'])){
         <li><a href="#">Requests</a></li>
 		<li><a href="#">Notifications</a></li>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo $user->getUName(); ?><span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="#">Edit Profile</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="logout.php">Log Out</a></li>
+            <li><a href="../logout.php">Log Out</a></li>
           </ul>
         </li>
       </ul>
     </div><!-- /.navbar-collapse -->
-    </nav>
   </div><!-- /.container-fluid -->
+</nav>
 </header>
-<script src="assests/jquery.min.js"></script>
-<script src="assests/library/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-<script src="assests/library/sweetalert-master/dist/sweetalert.min.js"></script>
+<script src="../assests/jquery.min.js"></script>
+<script src="../assests/library/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<script src="../assests/library/sweetalert-master/dist/sweetalert.min.js"></script>
 </body>
 </html>
